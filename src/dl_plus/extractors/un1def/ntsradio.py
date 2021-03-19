@@ -1,8 +1,7 @@
-from dl_plus import ytdl
+from datetime import datetime
+from urllib.parse import urljoin
+
 from dl_plus.extractor import Extractor, ExtractorError, ExtractorPlugin
-
-
-urljoin = ytdl.import_from('utils', 'urljoin')
 
 
 __version__ = '0.1.0.dev0'
@@ -61,9 +60,17 @@ class NTSRadioEpisodeExtractor(NTSRadioBaseExtractor):
             'shows', show_id, 'episodes', episode_id,
             item_id=episode_id, description='episode',
         )
+        broadcast_datetime = datetime.fromisoformat(episode['broadcast'])
+        title = '{name}, {location}, {date}'.format(
+            name=episode['name'].strip(),
+            location=episode['location_long'],
+            date=broadcast_datetime.strftime('%d.%m.%y')
+        )
         result = {
             '_type': 'url_transparent',
+            'title': title,
             'description': episode['description'],
+            'genre': ', '.join(g['value'] for g in episode['genres']),
         }
         for source in episode['audio_sources']:
             if source['source'] == 'mixcloud':
