@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from dl_plus.extractor import Extractor, ExtractorError, ExtractorPlugin
 
 
-__version__ = '0.1.0.dev0'
+__version__ = '0.1.0'
 
 
 plugin = ExtractorPlugin(__name__)
@@ -64,7 +64,7 @@ class NTSRadioEpisodeExtractor(NTSRadioBaseExtractor):
         title = '{name}, {location}, {date}'.format(
             name=episode['name'].strip(),
             location=episode['location_long'],
-            date=broadcast_datetime.strftime('%d.%m.%y')
+            date=broadcast_datetime.strftime('%d.%m.%y'),
         )
         result = {
             '_type': 'url_transparent',
