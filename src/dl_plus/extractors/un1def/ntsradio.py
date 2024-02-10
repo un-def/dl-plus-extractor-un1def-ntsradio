@@ -1,10 +1,14 @@
 from datetime import datetime
 from urllib.parse import urljoin
 
+from dl_plus import ytdl
 from dl_plus.extractor import Extractor, ExtractorError, ExtractorPlugin
 
 
-__version__ = '0.1.0'
+try_get = ytdl.import_from('utils', 'try_get')
+
+
+__version__ = '0.2.0.dev0'
 
 
 plugin = ExtractorPlugin(__name__)
@@ -53,6 +57,11 @@ class NTSRadioEpisodeExtractor(NTSRadioBaseExtractor):
     DLP_REL_URL = (
         r'/shows/(?P<show_id>[^/#?]+)/episodes/(?P<episode_id>[^/#?]+)')
 
+    _AUDIO_SOURCE_IE_KEY_MAP = {
+        'mixcloud': 'Mixcloud',
+        'soundcloud': 'Soundcloud',
+    }
+
     def _real_extract(self, url):
         show_id, episode_id = self.dlp_match(
             url).group('show_id', 'episode_id')
@@ -72,11 +81,13 @@ class NTSRadioEpisodeExtractor(NTSRadioBaseExtractor):
             'description': episode['description'],
             'genre': ', '.join(g['value'] for g in episode['genres']),
         }
-        for source in episode['audio_sources']:
-            if source['source'] == 'mixcloud':
-                result['url'] = source['url']
-                result['ie_key'] = 'Mixcloud'
-                break
+        if mixcloud_url := episode.get('mixcloud'):
+            result['url'] = mixcloud_url
+            result['ie_key'] = 'Mixcloud'
+        elif audio_source := try_get(episode, lambda e: e['audio_sources'][0]):
+            result['url'] = audio_source['url']
+            result['ie_key'] = self._AUDIO_SOURCE_IE_KEY_MAP.get(
+                audio_source['source'])
         else:
-            result['url'] = episode['audio_sources'][0]['url']
+            raise ExtractorError('no audio sources', expected=True)
         return result
