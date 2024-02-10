@@ -63,8 +63,8 @@ class NTSRadioEpisodeExtractor(NTSRadioBaseExtractor):
     }
 
     def _real_extract(self, url):
-        show_id, episode_id = self.dlp_match(
-            url).group('show_id', 'episode_id')
+        show_id, episode_id = self._match_valid_url(url).group(
+            'show_id', 'episode_id')
         episode = self._fetch(
             'shows', show_id, 'episodes', episode_id,
             item_id=episode_id, description='episode',
