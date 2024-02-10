@@ -8,7 +8,7 @@ from dl_plus.extractor import Extractor, ExtractorError, ExtractorPlugin
 try_get = ytdl.import_from('utils', 'try_get')
 
 
-__version__ = '0.2.0.dev0'
+__version__ = '0.2.0'
 
 
 plugin = ExtractorPlugin(__name__)
