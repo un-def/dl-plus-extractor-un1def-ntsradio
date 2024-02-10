@@ -1,0 +1,38 @@
+[build-system]
+requires = ['setuptools']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'dl-plus-extractor-un1def-ntsradio'
+description = 'A dl-plus extractor plugin for NTS Radio'
+readme = 'README.md'
+license = {text = 'MIT'}
+authors = [
+    {name = 'Dmitry Meyer', email = 'me@undef.im'},
+]
+requires-python = '>= 3.8'
+dynamic = ['version']
+
+[project.urls]
+Homepage = 'https://github.com/un-def/dl-plus-extractor-un1def-ntsradio'
+Repository = 'https://github.com/un-def/dl-plus-extractor-un1def-ntsradio.git'
+Changelog = 'https://github.com/un-def/dl-plus-extractor-un1def-ntsradio/releases'
+Issues = 'https://github.com/un-def/dl-plus-extractor-un1def-ntsradio/issues'
+
+[project.optional-dependencies]
+dl-plus = ['dl-plus >= 0.6.0']
+
+[tool.setuptools]
+zip-safe = false
+include-package-data = false
+
+[tool.setuptools.dynamic]
+version = {attr = 'dl_plus.extractors.un1def.ntsradio.__version__'}
+
+[tool.isort]
+lines_after_imports = 2
+multi_line_output = 5
+include_trailing_comma = true
+use_parentheses = true
+known_third_party = ['dl_plus']
+skip_glob = ['.*']

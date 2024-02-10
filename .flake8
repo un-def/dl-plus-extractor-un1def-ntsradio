@@ -1,0 +1,5 @@
+[flake8]
+filename =
+    ./src/**.py
+show_source = true
+statistics = true
